@@ -1,0 +1,16 @@
+FROM node:6.9
+
+RUN mkdir -p /tmp
+WORKDIR /tmp
+COPY ./app/package.json /tmp/
+RUN npm install
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./app /usr/src/app/
+RUN cp -a /tmp/node_modules /usr/src/app/ && \
+  chown -R node:node /usr/src/app/
+USER node
+
+CMD ["npm", "start"]

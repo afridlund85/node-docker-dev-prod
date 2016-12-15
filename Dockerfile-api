@@ -1,0 +1,16 @@
+FROM node:6.9
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+COPY ./api/package.json /usr/src/app/
+RUN chown -R node:node /usr/src/app
+USER node
+RUN npm install
+
+USER root
+COPY ./api/src /usr/src/app/src
+RUN chown -R node:node /usr/src/app/src
+USER node
+
+CMD ["node", "src/server.js"]

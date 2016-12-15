@@ -1,0 +1,7 @@
+[
+  {
+    "username": "admin",
+    "password": "$2a$10$aKF/W58Q9QcukRjbEqsoGurTG8LeTnMof0A025f4ubFvuiVqiVJvC",
+    "password_clear_text": "the password above is 'admin' bcrypted 10 rounds"
+  }
+]

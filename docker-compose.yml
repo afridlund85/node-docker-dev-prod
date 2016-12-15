@@ -1,0 +1,51 @@
+version: '2'
+volumes:
+  nodemodules_api:
+  nodemodules_app:
+
+services:
+
+  db:
+    image: mongo:3.4
+
+  db_seed:
+    build: ./db/seed
+    links:
+      - db
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile-api
+    user: node
+    volumes:
+      - ./api/src:/usr/src/app/src
+      - nodemodules_api:/usr/src/app/node_modules
+    ports:
+      - "3000:3000"
+    command: npm start
+    env_file: ./.env
+    depends_on:
+      - db
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    user: node
+    volumes:
+      - ./app:/usr/src/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - api
+    command: >
+      sh -c '
+      if test -d node_modules;
+      then
+        echo node_modules_exists ;
+      else
+        cp -a /tmp/node_modules /usr/src/app/;
+      fi &&
+      npm install && npm start
+      '
